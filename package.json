@@ -1,0 +1,49 @@
+{
+  "name": "ajanuw-vite-build-esm",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A TypeScript utility library built with Vite",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./add": {
+      "types": "./dist/add.d.ts",
+      "import": "./dist/add.js"
+    },
+    "./sub": {
+      "types": "./dist/sub.d.ts",
+      "import": "./dist/sub.js"
+    },
+    "./foo": {
+      "types": "./dist/foo.d.ts",
+      "import": "./dist/foo.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "build:prod": "vite build --mode production",
+    "dev": "vite build --watch",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.3"
+  },
+  "keywords": [
+    "typescript",
+    "vite",
+    "esm",
+    "utils"
+  ],
+  "author": "",
+  "license": "MIT"
+}
