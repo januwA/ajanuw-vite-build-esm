@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>通过 unpkg CDN 使用 ESM 包</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007acc;
+        }
+        .result {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffeaea;
+            color: #d63031;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .url-list {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌐 通过 unpkg CDN 使用 ajanuw-vite-build-esm</h1>
+
+    <div class="demo-section">
+        <h2>📋 unpkg URL 格式说明</h2>
+        <div class="url-list">
+            <h3>🎯 主要导入方式：</h3>
+            <p><strong>主入口：</strong><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/index.js</code></p>
+
+            <p><strong>按需导入：</strong><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js</code><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/sub.js</code><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/foo.js</code></p>
+
+            <p><strong>总是使用最新版本（省略版本号）：</strong><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm/dist/index.js</code></p>
+
+            <p><strong>指定版本范围：</strong><br>
+            <code>https://unpkg.com/ajanuw-vite-build-esm@^1.0.0/dist/index.js</code></p>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🚀 方式1: 从主入口导入所有函数</h2>
+        <div class="code-block">// 从 unpkg CDN 导入
+import { add, sub, foo } from 'https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/index.js';
+
+console.log('add(5, 3):', add(5, 3));
+console.log('sub(10, 4):', sub(10, 4));
+console.log('foo(3, 4):', foo(3, 4));
+        </div>
+        <div id="main-unpkg-result" class="result">加载中...</div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🎯 方式2: 按需导入单个模块</h2>
+        <div class="code-block">// 只导入需要的函数，减少加载量
+import { add } from 'https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js';
+import { sub } from 'https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/sub.js';
+
+console.log('add(100, 200):', add(100, 200));
+console.log('sub(500, 300):', sub(500, 300));
+        </div>
+        <div id="individual-unpkg-result" class="result">加载中...</div>
+    </div>
+
+    <div class="demo-section">
+        <h2>⚡ 方式3: 动态导入（按需加载）</h2>
+        <div class="code-block">// 动态导入，适合条件加载
+const loadMathUtils = async () => {
+    const { foo } = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/foo.js');
+    return foo;
+};
+
+const fooFunc = await loadMathUtils();
+console.log('动态导入的 foo(6, 8):', fooFunc(6, 8));
+        </div>
+        <div id="dynamic-unpkg-result" class="result">加载中...</div>
+    </div>
+
+    <div class="demo-section">
+        <h2>📦 方式4: Import Maps（推荐用于生产）</h2>
+        <div class="code-block">&lt;script type="importmap"&gt;
+{
+  "imports": {
+    "math-utils": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/index.js",
+    "math-utils/add": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js",
+    "math-utils/sub": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/sub.js"
+  }
+}
+&lt;/script&gt;
+
+&lt;script type="module"&gt;
+import { add, sub, foo } from 'math-utils';
+import { add as addOnly } from 'math-utils/add';
+&lt;/script&gt;
+        </div>
+        <div id="importmap-result" class="result">加载中...</div>
+    </div>
+
+    <div class="demo-section">
+        <h2>💡 unpkg 使用技巧</h2>
+        <ul>
+            <li><strong>版本控制：</strong> 生产环境建议指定具体版本号</li>
+            <li><strong>缓存优化：</strong> unpkg 提供强缓存，相同 URL 会被浏览器缓存</li>
+            <li><strong>文件浏览：</strong> 访问 <code>https://unpkg.com/ajanuw-vite-build-esm@1.0.0/</code> 可浏览包内容</li>
+            <li><strong>压缩版本：</strong> 添加 <code>?module</code> 参数可能获得优化版本</li>
+            <li><strong>备用 CDN：</strong> 还可以使用 jsDelivr: <code>https://cdn.jsdelivr.net/npm/ajanuw-vite-build-esm@1.0.0/dist/index.js</code></li>
+        </ul>
+    </div>
+
+    <!-- Import Map 定义 -->
+    <script type="importmap">
+    {
+        "imports": {
+            "math-utils": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/index.js",
+            "math-utils/add": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js",
+            "math-utils/sub": "https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/sub.js"
+        }
+    }
+    </script>
+
+    <!-- 演示脚本 -->
+    <script type="module">
+        // 注意：这些 URL 在包发布到 npm 之前不会工作
+        // 发布后请将演示中的版本号替换为实际版本
+
+        // 演示1: 主入口导入
+        try {
+            // 注意：实际使用时需要等包发布到 npm
+            const module1 = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/index.js');
+            const { add, sub, foo } = module1;
+
+            const results = [
+                `✅ 成功从 unpkg 导入主入口`,
+                `add(5, 3) = ${add(5, 3)}`,
+                `sub(10, 4) = ${sub(10, 4)}`,
+                `foo(3, 4) = ${foo(3, 4)} (3² + 4² = 25)`
+            ];
+
+            document.getElementById('main-unpkg-result').textContent = results.join('\n');
+        } catch (error) {
+            document.getElementById('main-unpkg-result').textContent =
+                `❌ 加载失败: ${error.message}\n💡 提示: 请先发布包到 npm`;
+            document.getElementById('main-unpkg-result').classList.add('error');
+        }
+
+        // 演示2: 按需导入
+        try {
+            const addModule = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js');
+            const subModule = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/sub.js');
+
+            const results = [
+                `✅ 成功按需导入模块`,
+                `add(100, 200) = ${addModule.add(100, 200)}`,
+                `sub(500, 300) = ${subModule.sub(500, 300)}`
+            ];
+
+            document.getElementById('individual-unpkg-result').textContent = results.join('\n');
+        } catch (error) {
+            document.getElementById('individual-unpkg-result').textContent =
+                `❌ 加载失败: ${error.message}\n💡 提示: 请先发布包到 npm`;
+            document.getElementById('individual-unpkg-result').classList.add('error');
+        }
+
+        // 演示3: 动态导入
+        try {
+            const loadFoo = async () => {
+                const module = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/foo.js');
+                return module.foo;
+            };
+
+            const fooFunc = await loadFoo();
+            const result = `✅ 动态导入成功\nfoo(6, 8) = ${fooFunc(6, 8)} (6² + 8² = 100)`;
+
+            document.getElementById('dynamic-unpkg-result').textContent = result;
+        } catch (error) {
+            document.getElementById('dynamic-unpkg-result').textContent =
+                `❌ 动态导入失败: ${error.message}\n💡 提示: 请先发布包到 npm`;
+            document.getElementById('dynamic-unpkg-result').classList.add('error');
+        }
+
+        // 演示4: Import Maps
+        try {
+            // 使用 Import Maps 定义的别名
+            const mathUtils = await import('math-utils');
+            const addOnly = await import('math-utils/add');
+
+            const results = [
+                `✅ Import Maps 导入成功`,
+                `使用别名 'math-utils': ${typeof mathUtils.add}`,
+                `使用别名 'math-utils/add': ${typeof addOnly.add}`
+            ];
+
+            document.getElementById('importmap-result').textContent = results.join('\n');
+        } catch (error) {
+            document.getElementById('importmap-result').textContent =
+                `❌ Import Maps 失败: ${error.message}\n💡 提示: 请先发布包到 npm`;
+            document.getElementById('importmap-result').classList.add('error');
+        }
+
+        // 控制台演示
+        console.log('🌐 unpkg CDN 导入演示');
+        console.log('发布到 npm 后，可以直接在控制台尝试：');
+        console.log(`const { add } = await import('https://unpkg.com/ajanuw-vite-build-esm@1.0.0/dist/add.js');`);
+        console.log(`console.log(add(1, 2)); // 3`);
+    </script>
+</body>
+</html>

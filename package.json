@@ -2,35 +2,59 @@
   "name": "ajanuw-vite-build-esm",
   "version": "1.0.0",
   "type": "module",
-  "description": "A TypeScript utility library built with Vite",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "description": "A modern TypeScript utility library with ESM support, built with Vite. Provides math utilities with tree-shaking friendly exports.",
+  "main": "./dist/umd/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "unpkg": "./dist/umd/index.js",
+  "jsdelivr": "./dist/umd/index.js",
+  "homepage": "https://github.com/januwA/ajanuw-vite-build-esm#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/januwA/ajanuw-vite-build-esm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/januwA/ajanuw-vite-build-esm/issues"
+  },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/umd/index.js",
+      "default": "./dist/esm/index.js"
     },
     "./add": {
-      "types": "./dist/add.d.ts",
-      "import": "./dist/add.js"
+      "types": "./dist/esm/add.d.ts",
+      "import": "./dist/esm/add.js",
+      "default": "./dist/esm/add.js"
     },
     "./sub": {
-      "types": "./dist/sub.d.ts",
-      "import": "./dist/sub.js"
+      "types": "./dist/esm/sub.d.ts",
+      "import": "./dist/esm/sub.js",
+      "default": "./dist/esm/sub.js"
     },
     "./foo": {
-      "types": "./dist/foo.d.ts",
-      "import": "./dist/foo.js"
+      "types": "./dist/esm/foo.d.ts",
+      "import": "./dist/esm/foo.js",
+      "default": "./dist/esm/foo.js"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
-    "build:prod": "vite build --mode production",
+    "build": "npm run build:esm && npm run build:umd",
+    "build:esm": "vite build",
+    "build:umd": "BUILD_UMD=true vite build",
+    "build:prod": "npm run build:esm:prod && npm run build:umd:prod",
+    "build:esm:prod": "vite build --mode production",
+    "build:umd:prod": "BUILD_UMD=true vite build --mode production",
     "dev": "vite build --watch",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build:prod"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
@@ -42,8 +66,16 @@
     "typescript",
     "vite",
     "esm",
-    "utils"
+    "utils",
+    "math",
+    "library",
+    "tree-shaking",
+    "modular",
+    "javascript"
   ],
-  "author": "",
+  "author": {
+    "name": "januwA",
+    "url": "https://github.com/januwA"
+  },
   "license": "MIT"
 }
