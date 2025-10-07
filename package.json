@@ -37,6 +37,11 @@
       "types": "./dist/esm/foo.d.ts",
       "import": "./dist/esm/foo.js",
       "default": "./dist/esm/foo.js"
+    },
+    "./react-shared": {
+      "types": "./dist/esm/react-shared.d.ts",
+      "import": "./dist/esm/react-shared.js",
+      "default": "./dist/esm/react-shared.js"
     }
   },
   "files": [
@@ -58,9 +63,15 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.5",
-    "vite-plugin-dts": "^3.5.3"
+    "vite-plugin-dts": "^3.5.3",
+    "zustand": "^5.0.8"
   },
   "keywords": [
     "typescript",
