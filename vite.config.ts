@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+    define: {
+      "process.env.NODE_ENV": isProduction ? '"production"' : '"development"',
+    },
     build: {
       // 生产环境不生成 source map
       sourcemap: !isProduction,
@@ -49,11 +52,14 @@ export default defineConfig(({ mode }) => {
       rollupOptions: buildUmd
         ? {
             // UMD 构建：将依赖作为全局变量
-            external: ["react", "react-dom"],
+            external: ["react", "react-dom", "react-router-dom", "react/jsx-runtime", "zustand"],
             output: {
               globals: {
                 react: "React",
                 "react-dom": "ReactDOM",
+                "react-router-dom": "ReactRouterDOM",
+                "react/jsx-runtime": "ReactJSXRuntime",
+                zustand: "Zustand",
               },
             },
           }

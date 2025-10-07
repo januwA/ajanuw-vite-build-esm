@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { create } from 'zustand';
+import { useNavigate } from "react-router-dom";
 
 interface CountStore {
   count: number;
@@ -24,6 +25,31 @@ export const CountComponent = () => {
       <button onClick={decrement}>-</button>
       <button onClick={reset}>Reset</button>
       <button onClick={increment}>+</button>
+    </div>
+  );
+};
+
+export const DynamicJump = () => {
+  const [path, setPath] = useState('');
+  const navigate = useNavigate();
+
+  const handleJump = () => {
+    if (path.trim()) {
+      navigate(path);
+    }
+  };
+
+  return (
+    <div>
+      <h3>Dynamic Jump</h3>
+      <input
+        type="text"
+        value={path}
+        onChange={(e) => setPath(e.target.value)}
+        placeholder="输入跳转路径 (如: /about)"
+        style={{ marginRight: '10px', padding: '5px' }}
+      />
+      <button onClick={handleJump}>跳转</button>
     </div>
   );
 };
