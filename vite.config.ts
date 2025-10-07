@@ -29,11 +29,11 @@ export default defineConfig(({ mode }) => {
       // 库模式构建配置
       lib: buildUmd
         ? {
-            // UMD 构建：只构建主入口
-            entry: resolve(__dirname, "src/index.ts"),
+            // UMD 构建：单入口配置
+            entry: resolve(__dirname, "src/react-shared.tsx"),
             formats: ["umd"],
-            name: "AjanuwViteBuildEsm",
-            fileName: () => "index.js", // UMD 目录下直接叫 index.js
+            name: "ReactShared",
+            fileName: () => "react-shared.js",
           }
         : {
             // ESM 构建：多入口配置，支持按需导入
@@ -46,15 +46,27 @@ export default defineConfig(({ mode }) => {
             },
             formats: ["es"], // ESM 格式
           },
-      rollupOptions: {
-        external: [
-          "react",
-          "react-dom",
-          "react/jsx-runtime",
-          "react-router-dom",
-          "zustand",
-        ],
-      },
+      rollupOptions: buildUmd
+        ? {
+            // UMD 构建：将依赖作为全局变量
+            external: ["react", "react-dom"],
+            output: {
+              globals: {
+                react: "React",
+                "react-dom": "ReactDOM",
+              },
+            },
+          }
+        : {
+            // ESM 构建：依赖保持外部
+            external: [
+              "react",
+              "react-dom",
+              "react/jsx-runtime",
+              "react-router-dom",
+              "zustand",
+            ],
+          },
     },
   };
 });
